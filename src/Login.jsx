@@ -12,22 +12,29 @@ const Login = () => {
             alert("Please fill in all fields");
             return;
         }
-        console.log(email);
-        navigate("/main");
+
+        const userData = JSON.parse(localStorage.getItem(email));
+
+        if (!userData || userData.pass !== pass) {
+            alert("Invalid email or password");
+            return;
+        }
+
+        console.log("Logging in:", userData.name);
+        navigate("/main", { state: { username: userData.name } });
     };
-        
+
     return (
         <div className="auth-form-container">
             <h2>Login</h2>
-            <br/>
             <form className="login-form" onSubmit={handleSubmit}>
                 <label htmlFor="email">Email</label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email" />
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" required />
                 <label htmlFor="password">Password</label>
-                <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password" />
+                <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" required />
                 <button type="submit">Log In</button>
             </form>
-            <br/>
+
             <p>Don't have an account?</p>
             <button className="register-btn" onClick={() => navigate("/register")}>
                 Register Here
